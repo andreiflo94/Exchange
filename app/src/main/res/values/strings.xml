@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Exchange</string>
+    <string name="rate_value">%s %s</string>
+    <string name="last_updated">Last updated: %s</string>
+    <string name="base_currency">1 %s</string>
+    <string name="charts">CHARTS</string>
+    <string name="settings">SETTINGS</string>
+    <string name="refresh_time">Refresh Time</string>
+    <string name="base_currency_label">Base currency:</string>
+    <string-array name="refresh_rate">
+        <item>3</item>
+        <item>5</item>
+        <item>15</item>
+    </string-array>
+    <string-array name="historic_currencies">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>BGN</item>
+    </string-array>
+</resources>
