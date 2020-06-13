@@ -2,9 +2,9 @@ package com.heixss.exchange.model.repositories
 
 import androidx.lifecycle.LiveData
 import com.heixss.exchange.db.AppDatabase
+import com.heixss.exchange.model.local.ChartData
 import com.heixss.exchange.model.local.Currency
 import com.heixss.exchange.model.local.Rate
-import com.heixss.exchange.model.remote.HistoricRatesResponse
 import com.heixss.exchange.model.remote.RatesResponse
 import com.heixss.exchange.network.ExchangeApi
 import io.reactivex.Single
@@ -42,11 +42,70 @@ class RatesRepository @Inject constructor(
             }
     }
 
-    fun loadHistoricData(startDate: String, endDate: String): Single<HistoricRatesResponse>{
-        return api.getHistoricRates(startDate, endDate).subscribeOn(Schedulers.io())
-            .map{
-
-                return@map it
+    fun loadChartData(startDate: String, endDate: String, symbol: String): Single<List<ChartData>> {
+        return api.getChartRates(startDate, endDate, symbols = symbol).subscribeOn(Schedulers.io())
+            .map { response ->
+                val chartDataList = ArrayList<ChartData>()
+                chartDataList.addAll(parseDateMapEntry(response.rates))
+                return@map chartDataList
             }
+    }
+
+    /**
+     * response.rates has a map as value and each entry has a map as value for each key eg:
+     *  "rates":{
+     *      "2018-05-04":{},
+     *      "2018-08-27":{},
+     *      "2018-06-08":{
+     *      "JPY":128.64,
+     *      "ILS":4.2009
+     *      },
+     *  }
+     *  I've named "2018-05-04":{}, as dateMapEntry
+     *  and "JPY":128.64, as ratesMapEntry
+     */
+    private fun parseDateMapEntry(rates: Map<String, Map<String, String>>): ArrayList<ChartData> {
+        val chartDataList = ArrayList<ChartData>()
+        rates.forEach { dateMapEntry ->
+            val date = dateMapEntry.key
+            val dateMap = dateMapEntry.value
+            chartDataList.addAll(parseRatesMapEntry(date, dateMap))
+        }
+        return chartDataList
+    }
+
+    private fun parseRatesMapEntry(
+        date: String,
+        dateMap: Map<String, String>
+    ): ArrayList<ChartData> {
+        val chartDataList = ArrayList<ChartData>()
+        dateMap.forEach { ratesMapEntry ->
+            var chartData: ChartData? = null
+            when (ratesMapEntry.key) {
+                "RON" -> {
+                    chartData = ChartData(
+                        day = date,
+                        value = ratesMapEntry.value.toDouble(),
+                        currency = "RON"
+                    )
+                }
+                "USD" -> {
+                    chartData = ChartData(
+                        day = date,
+                        value = ratesMapEntry.value.toDouble(),
+                        currency = "USD"
+                    )
+                }
+                "BGN" -> {
+                    chartData = ChartData(
+                        day = date,
+                        value = ratesMapEntry.value.toDouble(),
+                        currency = "BGN"
+                    )
+                }
+            }
+            chartData?.let { chartDataList.add(it) }
+        }
+        return chartDataList
     }
 }

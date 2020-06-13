@@ -14,7 +14,7 @@
     </string-array>
     <string-array name="historic_currencies">
         <item>USD</item>
-        <item>EUR</item>
+        <item>RON</item>
         <item>BGN</item>
     </string-array>
 </resources>

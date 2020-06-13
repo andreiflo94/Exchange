@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class HistoricRatesResponse(
+data class ChartRatesResponse(
     @Json(name = "end_at")
     val endAt: String = "",
     @Json(name = "rates")

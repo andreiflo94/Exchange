@@ -112,4 +112,5 @@ dependencies {
 
     //
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

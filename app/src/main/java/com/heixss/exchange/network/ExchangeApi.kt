@@ -1,10 +1,9 @@
 package com.heixss.exchange.network
 
-import com.heixss.exchange.model.remote.HistoricRatesResponse
+import com.heixss.exchange.model.remote.ChartRatesResponse
 import com.heixss.exchange.model.remote.RatesResponse
 import io.reactivex.Single
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ExchangeApi {
@@ -16,10 +15,12 @@ interface ExchangeApi {
     ): Single<RatesResponse>
 
     @GET("history")
-    fun getHistoricRates(
+    fun getChartRates(
         @Query("start_at")
         startAt: String,
         @Query("end_at")
-        endAt: String
-    ): Single<HistoricRatesResponse>
+        endAt: String,
+        @Query("symbols") symbols: String,
+        @Query("base") base: String = "EUR"
+    ): Single<ChartRatesResponse>
 }
