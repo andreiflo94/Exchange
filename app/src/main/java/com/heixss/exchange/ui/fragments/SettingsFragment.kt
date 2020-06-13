@@ -32,11 +32,20 @@ class SettingsFragment : BaseFragment(R.layout.settings_fragment) {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 viewModel.setHomeRefreshTime(refreshRateArray[position].toInt())
             }
         }
-        spn_refresh_rate.setSelection(refreshRateArray.indexOf(viewModel.getHomeRefreshTime().toString()))
+        spn_refresh_rate.setSelection(
+            refreshRateArray.indexOf(
+                viewModel.getHomeRefreshTime().toString()
+            )
+        )
     }
 
     private fun configureCurrenciesSpinner(currencies: List<String>) {

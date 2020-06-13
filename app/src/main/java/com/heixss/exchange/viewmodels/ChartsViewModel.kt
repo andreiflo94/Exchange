@@ -18,13 +18,12 @@ class ChartsViewModel @Inject constructor(private val ratesRepository: RatesRepo
     fun loadChartResponse(symbol: String) {
         val today: LocalDate = LocalDate.now()
         val tenDaysAgo = today.minusDays(10)
-        disposables.add(ratesRepository.loadChartData(tenDaysAgo.toString(), today.toString(), symbol)
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { refreshSubject.onNext(Progress.SHOW) }
-            .doFinally { refreshSubject.onNext(Progress.HIDE) }
-            .subscribe(
-                { liveChartData.value = it },
-                { errorSubject.onNext(it.localizedMessage!!) })
+        disposables.add(
+            ratesRepository.loadChartData(tenDaysAgo.toString(), today.toString(), symbol)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { liveChartData.value = it },
+                    { errorSubject.onNext(it.localizedMessage!!) })
         )
     }
 }

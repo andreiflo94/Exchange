@@ -9,6 +9,7 @@ import com.heixss.exchange.R
 import com.heixss.exchange.ui.adapter.RatesAdapter
 import com.heixss.exchange.viewmodels.HomeViewModel
 import kotlinx.android.synthetic.main.home_screen_fragment.*
+import java.util.*
 
 class HomeFragment : BaseFragment(R.layout.home_screen_fragment) {
 
@@ -18,8 +19,7 @@ class HomeFragment : BaseFragment(R.layout.home_screen_fragment) {
         super.onActivityCreated(savedInstanceState)
         viewModel.liveRates().observe(viewLifecycleOwner, Observer {
             ratesAdapter.updateList(it)
-            tv_last_updated.text =
-                String.format(getString(R.string.last_updated), System.currentTimeMillis())
+            setLastUpdatedAtTv()
             tv_base_currency.text =
                 String.format(getString(R.string.base_currency), viewModel.getBaseCurrency())
         })
@@ -32,7 +32,6 @@ class HomeFragment : BaseFragment(R.layout.home_screen_fragment) {
 
     override fun onResume() {
         super.onResume()
-        observeRefreshSubject()
         viewModel.loadRates()
     }
 
@@ -47,14 +46,14 @@ class HomeFragment : BaseFragment(R.layout.home_screen_fragment) {
         ib_settings.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment())
         }
-        ib_charts.setOnClickListener{
+        ib_charts.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToChartsFragment())
         }
     }
 
-    private fun observeRefreshSubject() {
-        disposables.add(viewModel.refreshSubject.subscribe {
-            //todo show a loading something
-        })
+    private fun setLastUpdatedAtTv(){
+        val sdf = java.text.SimpleDateFormat("HH:mm:ss",Locale.getDefault())
+        tv_last_updated.text =
+            String.format(getString(R.string.last_updated), sdf.format(Date(System.currentTimeMillis())))
     }
 }

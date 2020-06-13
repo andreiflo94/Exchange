@@ -2,11 +2,13 @@ package com.heixss.exchange.viewmodels
 
 import androidx.lifecycle.LiveData
 import com.heixss.exchange.model.local.Rate
+import com.heixss.exchange.model.remote.RatesResponse
 import com.heixss.exchange.model.repositories.RatesRepository
 import com.heixss.exchange.model.repositories.SharedPrefsRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -15,6 +17,7 @@ class HomeViewModel @Inject constructor(
     private val sharedPrefsRepository: SharedPrefsRepository
 ) : BaseViewModel() {
 
+    val ratesResponseSubject = PublishSubject.create<RatesResponse>()
     private lateinit var ratesDisposable: Disposable
 
     fun liveRates(): LiveData<List<Rate>> {
@@ -36,9 +39,8 @@ class HomeViewModel @Inject constructor(
                     sharedPrefsRepository.getBaseCurrency()
                 )
                     .toObservable()
-            }.observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { refreshSubject.onNext(Progress.SHOW) }
-            .doFinally { refreshSubject.onNext(Progress.HIDE) }
+            }.doOnNext { ratesResponseSubject.onNext(it) }
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({}, { errorSubject.onNext(it.localizedMessage!!) })
     }
 

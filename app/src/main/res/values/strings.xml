@@ -7,6 +7,7 @@
     <string name="settings">SETTINGS</string>
     <string name="refresh_time">Refresh Time</string>
     <string name="base_currency_label">Base currency:</string>
+    <string name="exchange_rates">Exchange rates:</string>
     <string-array name="refresh_rate">
         <item>3</item>
         <item>5</item>

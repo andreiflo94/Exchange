@@ -56,6 +56,8 @@ dependencies {
     def recyclerview_version = '1.2.0-alpha03'
     def rxjava_version = '2.2.17'
     def rxandroid_version = '2.1.1'
+    def mockito_version = '2.7.22'
+    def mpandroidchart_version = 'v3.1.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -112,5 +114,9 @@ dependencies {
 
     //
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation "com.github.PhilJay:MPAndroidChart:$mpandroidchart_version"
+
+    // required if you want to use Mockito for unit tests
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
 }

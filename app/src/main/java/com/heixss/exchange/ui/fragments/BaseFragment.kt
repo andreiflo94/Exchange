@@ -8,7 +8,7 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-abstract class BaseFragment: Fragment {
+abstract class BaseFragment : Fragment {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
