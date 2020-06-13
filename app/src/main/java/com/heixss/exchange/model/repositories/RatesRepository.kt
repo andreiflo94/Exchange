@@ -24,6 +24,10 @@ class RatesRepository @Inject constructor(
         return appDatabase.currencyDao().getCurrencies()
     }
 
+    /**
+     * Method that fetches the response from the api, then the response is parsed into
+     * a array of Rate objects. Then the array will be stored in the local db.
+     */
     fun loadRates(
         baseCurrency: String
     ): Single<RatesResponse> {
@@ -42,6 +46,11 @@ class RatesRepository @Inject constructor(
             }
     }
 
+    /**
+     * Method that fetches the response from the api, then the response is parsed into
+     * a array of ChartData objects. Then the method will return a Single that emits
+     * this array.
+     */
     fun loadChartData(startDate: String, endDate: String, symbol: String): Single<List<ChartData>> {
         return api.getChartRates(startDate, endDate, symbols = symbol).subscribeOn(Schedulers.io())
             .map { response ->
